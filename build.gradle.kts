@@ -30,6 +30,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	implementation("io.micrometer:micrometer-registry-prometheus")
 
 	compileOnly("org.projectlombok:lombok")
 
