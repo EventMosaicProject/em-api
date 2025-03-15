@@ -9,6 +9,7 @@ COPY gradlew .
 COPY gradle gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
+COPY gradle.properties .
 
 # Копируем исходный код приложения
 COPY src src
@@ -19,6 +20,9 @@ RUN chmod +x gradlew && ./gradlew bootJar
 # Второй этап: формируем финальный образ для запуска приложения
 FROM openjdk:21-jdk-slim
 WORKDIR /app
+
+# Создаем директорию для логов
+RUN mkdir -p /app/logs && chmod 777 /app/logs
 
 # Копируем собранный jar-файл из предыдущего этапа
 COPY --from=builder /app/build/libs/*.jar app.jar
