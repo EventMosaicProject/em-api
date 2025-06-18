@@ -18,6 +18,8 @@ import java.util.Optional;
 @Mapper(componentModel = "spring")
 public interface EventDetailsMapper {
 
+    String N_A = "N/A";
+
     /**
      * Преобразует {@link EventDocument} в {@link EventDetailsResponse}.
      *
@@ -44,7 +46,7 @@ public interface EventDetailsMapper {
     @Named("mapTitleFromEventDocument")
     default String mapTitleFromEventDocument(EventDocument eventDocument) {
         if (eventDocument == null || !StringUtils.hasText(eventDocument.getEventCode())) {
-            return "N/A";
+            return N_A;
         }
         return String.format("Событие CAMEO: %s", eventDocument.getEventCode());
     }
@@ -57,7 +59,7 @@ public interface EventDetailsMapper {
      */
     @Named("mapLocationString")
     default String mapLocationString(String fullName) {
-        return Optional.ofNullable(fullName).filter(StringUtils::hasText).orElse("N/A");
+        return Optional.ofNullable(fullName).filter(StringUtils::hasText).orElse(N_A);
     }
 
     /**
@@ -70,7 +72,7 @@ public interface EventDetailsMapper {
     default List<String> mapActorsListFromEventDocument(EventDocument eventDocument) {
         List<String> actors = new ArrayList<>();
         if (eventDocument == null) {
-            return List.of("N/A");
+            return List.of(N_A);
         }
         if (StringUtils.hasText(eventDocument.getActor1Name())) {
             actors.add(eventDocument.getActor1Name());
@@ -79,7 +81,7 @@ public interface EventDetailsMapper {
             actors.add(eventDocument.getActor2Name());
         }
         return actors.isEmpty()
-                ? List.of("N/A")
+                ? List.of(N_A)
                 : actors;
     }
 } 

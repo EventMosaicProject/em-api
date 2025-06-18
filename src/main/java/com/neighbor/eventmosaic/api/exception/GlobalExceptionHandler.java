@@ -38,6 +38,21 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Обрабатывает исключение {@link GeoPointBadRequestException}.
+     * Возвращает HTTP 400 Bad Request.
+     *
+     * @param ex      исключение
+     * @param request веб-запрос
+     * @return ResponseEntity с деталями ошибки
+     */
+    @ExceptionHandler(GeoPointBadRequestException.class)
+    public ResponseEntity<Object> handleGeoPointBadRequestException(GeoPointBadRequestException ex,
+                                                                    WebRequest request) {
+        log.warn("Некорректные данные географической точки: {}", ex.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    /**
      * Обрабатывает исключения валидации аргументов метода (например, @Valid в DTO).
      * Возвращает HTTP 400 Bad Request.
      *

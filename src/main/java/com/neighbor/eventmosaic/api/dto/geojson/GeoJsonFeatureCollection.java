@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Представление GeoJSON FeatureCollection.
@@ -28,9 +30,14 @@ public class GeoJsonFeatureCollection {
 
     /**
      * Конструктор для инициализации с предопределенным списком фич.
+     * Автоматически фильтрует null значения для обеспечения валидности GeoJSON.
+     *
      * @param features список фич
      */
     public GeoJsonFeatureCollection(List<GeoJsonFeature> features) {
-        this.features = features;
+        this.features = Objects.requireNonNullElse(features, Collections.<GeoJsonFeature>emptyList())
+                .stream()
+                .filter(Objects::nonNull)
+                .toList();
     }
 } 
