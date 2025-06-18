@@ -18,7 +18,7 @@
 3. **Серверная кластеризация (при необходимости):**
    * Используется агрегация `geotile_grid` с precision, соответствующим уровню масштабирования карты.
    * Для каждого кластера (ячейки сетки) вычисляются подагрегации:
-     * `geocentroid` — координаты центра кластера
+     * `geo_centroid` — координаты центра кластера
      * `avg` по полю `avgTone` — средний эмоциональный тон событий в кластере
      * `top_hits` с `size: 1` — получение одного события из кластера (для кластеров из одного события)
 
@@ -98,7 +98,7 @@ sequenceDiagram
         Note over Service: Стратегия: кластеризация
         Service->>Service: Формирование запроса с geotile_grid
         Service->>ES: Поиск с агрегацией в gdelt-events-2025-05-19
-        Note over ES: geo_bounding_box + geotile_grid<br/>+ geocentroid + avg(avgTone) + top_hits
+        Note over ES: geo_bounding_box + geotile_grid<br/>+ geo_centroid + avg(avgTone) + top_hits
         ES-->>Service: Агрегированные результаты (кластеры)
         
         loop Для каждого кластера
