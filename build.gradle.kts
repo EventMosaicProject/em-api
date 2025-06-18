@@ -27,17 +27,25 @@ dependencies {
 	implementation(libs.spring.boot.starter.actuator)
 	implementation(libs.spring.boot.starter.data.elasticsearch)
 	implementation(libs.spring.boot.starter.web)
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.springdoc.openapi.starter.webmvc.ui)
+	developmentOnly(libs.spring.boot.docker.compose)
+//	developmentOnly(libs.spring.boot.devtools)
+
 	implementation(libs.spring.cloud.starter.netflix.eureka)
+
 	implementation(libs.micrometer.prometheus)
 	implementation(libs.logstash.logback.encoder)
 
 	compileOnly(libs.lombok)
-
-	developmentOnly(libs.spring.boot.devtools)
-	developmentOnly(libs.spring.boot.docker.compose)
-
 	annotationProcessor(libs.lombok)
-	
+
+	// MapStruct
+	implementation(libs.mapstruct)
+	annotationProcessor(libs.mapstructProcessor)
+
+
+
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 }

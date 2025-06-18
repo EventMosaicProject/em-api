@@ -9,7 +9,7 @@ spring:
   elasticsearch:
     uris: ${ELASTICSEARCH_SCHEME:http}://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}
     username: ${ELASTICSEARCH_USERNAME:elastic}
-    password: ${ELASTICSEARCH_PASSWORD:secret}
+    password: ${ELASTICSEARCH_PASSWORD:elastic}
     connection-timeout: 5s
     socket-timeout: 30s
 
@@ -47,8 +47,27 @@ eureka:
       defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:http://em-discovery:8761/eureka/}   # URL-адрес реестра Eureka
   instance:
     prefer-ip-address: ${EUREKA_PREFER_IP:false}                                                # Используем хостнейм вместо IP
-    instance-id: ${EUREKA_INSTANCE_HOSTNAME:em-api}:${server.port}:${random.uuid}            # Уникальный идентификатор инстанса
+    instance-id: ${EUREKA_INSTANCE_HOSTNAME:em-api}:${server.port}:${random.uuid}               # Уникальный идентификатор инстанса
     lease-renewal-interval-in-seconds: ${EUREKA_HEARTBEAT_INTERVAL:30}                          # Частота отправки heartbeat
     lease-expiration-duration-in-seconds: ${EUREKA_LEASE_EXPIRATION:90}                         # Время, через которое инстанс будет считаться недоступным
     status-page-url: http://${GATEWAY_PUBLIC_HOSTNAME:localhost}:${GATEWAY_PUBLIC_PORT:8080}/api/actuator
     health-check-url: http://${GATEWAY_PUBLIC_HOSTNAME:localhost}:${GATEWAY_PUBLIC_PORT:8080}/api/actuator/health
+
+# Конфигурация для EventMosaic API специфичных свойств
+api:
+  config:
+    individual-events-zoom-threshold: 12                                                        # Порог для отображения отдельных событий на карте
+    mention-search-days-range: 3                                                                # Диапазон дней для поиска упоминаний
+    default-event-window-hours: 24                                                              # Стандартный временной интервал для событий
+
+# Конфигурация Springdoc OpenAPI (для Swagger UI)
+springdoc:
+  api-docs:
+    path: /api/v1/docs                                                                            # Путь к JSON/YAML описанию API. Стандартно /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html                                                                        # Путь к Swagger UI. Стандартно /swagger-ui/index.html
+    operations-sorter: alpha                                                                      # Сортировка операций по алфавиту
+    tags-sorter: alpha                                                                            # Сортировка тегов по алфавиту
+  # Пути, которые должны быть включены в документацию OpenAPI
+  paths-to-match:
+    - /api/v1/**
