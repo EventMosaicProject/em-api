@@ -41,4 +41,32 @@ public class ApiConfigProperties {
      */
     @Min(1)
     private int defaultEventWindowHours = 24;
+
+    /**
+     * Максимальное количество кластеров в одном ответе при кластеризации.
+     */
+    @Min(10)
+    @Max(10000)
+    private int maxClustersPerRequest = 1000;
+
+    /**
+     * Максимальное количество отдельных событий в одном ответе.
+     */
+    @Min(10)
+    @Max(10000)
+    private int maxIndividualEventsPerRequest = 500;
+
+    /**
+     * Precision по умолчанию для geotile_grid агрегации.
+     */
+    @Min(1)
+    @Max(15)
+    private int defaultGeotilePrecision = 5;
+
+    /**
+     * Максимальный precision для geotile_grid агрегации.
+     */
+    @Min(5)
+    @Max(29)
+    private int maxGeotilePrecision = 18;
 } 
