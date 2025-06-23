@@ -19,7 +19,7 @@ import java.util.Objects;
 public class GeoJsonFeatureCollection {
 
     /**
-     * Тип объекта, всегда "FeatureCollection".
+     * Тип объекта, всегда FeatureCollection
      */
     private String type = "FeatureCollection";
 
@@ -39,5 +39,14 @@ public class GeoJsonFeatureCollection {
                 .stream()
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    /**
+     * Создает пустую FeatureCollection.
+     *
+     * @return пустая GeoJsonFeatureCollection
+     */
+    public static GeoJsonFeatureCollection empty() {
+        return new GeoJsonFeatureCollection(Collections.emptyList());
     }
 } 

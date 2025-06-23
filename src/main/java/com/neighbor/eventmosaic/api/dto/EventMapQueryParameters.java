@@ -1,5 +1,7 @@
 package com.neighbor.eventmosaic.api.dto;
 
+import com.neighbor.eventmosaic.api.validation.ValidBoundingBox;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -7,42 +9,28 @@ import java.time.LocalDate;
 
 /**
  * DTO для параметров запроса событий на карте.
+ * Используется для биндинга query-параметров в методе контроллера.
  */
 @Data
 public class EventMapQueryParameters {
 
-    /**
-     * Начальная дата диапазона (включительно).
-     * Формат: YYYY-MM-DD.
-     */
+    @Parameter(description = "Начальная дата для фильтрации (включительно), формат YYYY-MM-DD", example = "2025-06-20")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate since;
 
-    /**
-     * Конечная дата диапазона (включительно).
-     * Формат: YYYY-MM-DD.
-     */
+    @Parameter(description = "Конечная дата для фильтрации (включительно), формат YYYY-MM-DD", example = "2025-06-21")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate until;
 
-    /**
-     * Конкретная дата для запроса (если не используется диапазон since/until).
-     * Формат: YYYY-MM-DD.
-     */
+    @Parameter(description = "Конкретная дата для фильтрации, формат YYYY-MM-DD. Игнорируется, если заданы since или until.", example = "2025-06-20")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
-    /**
-     * Границы видимой области карты (bounding box).
-     * Формат: "minLat,minLon,maxLat,maxLon".
-     * Пример: "34.0,-10.0,42.0,5.0".
-     */
+    @Parameter(description = "Bounding box для фильтрации в формате 'minLat,minLon,maxLat,maxLon'",
+            example = "55.6,37.5,55.8,37.7")
+    @ValidBoundingBox
     private String bbox;
 
-    /**
-     * Текущий уровень масштабирования карты.
-     * Используется для определения стратегии кластеризации.
-     * Пример: 10.
-     */
+    @Parameter(description = "Уровень масштабирования карты (zoom)", example = "10")
     private Integer zoom;
 } 

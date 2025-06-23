@@ -59,6 +59,10 @@ api:
     individual-events-zoom-threshold: 12                                                        # Порог для отображения отдельных событий на карте
     mention-search-days-range: 3                                                                # Диапазон дней для поиска упоминаний
     default-event-window-hours: 24                                                              # Стандартный временной интервал для событий
+    max-clusters-per-request: 1000                                                              # Максимальное количество кластеров в ответе
+    max-individual-events-per-request: 500                                                      # Максимальное количество отдельных событий в ответе
+    default-geotile-precision: 5                                                                # Precision по умолчанию для geotile_grid
+    max-geotile-precision: 18                                                                   # Максимальный precision для geotile_grid
 
 # Конфигурация Springdoc OpenAPI (для Swagger UI)
 springdoc:

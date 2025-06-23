@@ -1,5 +1,7 @@
 package com.neighbor.eventmosaic.api.exception;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,21 @@ public class GlobalExceptionHandler {
                                                                   WebRequest request) {
         log.warn("Ресурс не найден: {}", ex.getMessage());
         return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+    }
+
+    /**
+     * Обрабатывает исключение {@link InvalidApiParameterException}.
+     * Возвращает HTTP 400 Bad Request.
+     *
+     * @param ex      исключение
+     * @param request веб-запрос
+     * @return ResponseEntity с деталями ошибки
+     */
+    @ExceptionHandler(InvalidApiParameterException.class)
+    public ResponseEntity<Object> handleInvalidParameterException(InvalidApiParameterException ex,
+                                                                  WebRequest request) {
+        log.warn("Некорректные параметры запроса: {}", ex.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
     /**
@@ -91,6 +108,28 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Обрабатывает ошибки валидации параметров, аннотированных @Valid... (например, @ValidBoundingBox).
+     * Срабатывает, когда валидация происходит на уровне параметров метода контроллера.
+     * Возвращает HTTP 400 Bad Request.
+     *
+     * @param ex      исключение
+     * @param request веб-запрос
+     * @return ResponseEntity с деталями ошибки
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
+                                                                     WebRequest request) {
+        String errors = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> String.format("'%s': %s", getParameterName(violation), violation.getMessage()))
+                .collect(Collectors.joining(", "));
+
+        String message = "Ошибка валидации параметра: " + errors;
+        log.warn("{} для пути {}", message, getPath(request));
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    /**
      * Обрабатывает все остальные исключения.
      * Возвращает HTTP 500 Internal Server Error.
      *
@@ -133,5 +172,19 @@ public class GlobalExceptionHandler {
      */
     private String getPath(WebRequest request) {
         return request.getDescription(false).replace("uri=", "");
+    }
+
+    /**
+     * Извлекает имя параметра из ConstraintViolation.
+     *
+     * @param violation нарушение валидации
+     * @return имя параметра
+     */
+    private String getParameterName(ConstraintViolation<?> violation) {
+        // violation.getPropertyPath() возвращает что-то вроде getEventsForMap.bbox
+        // нам нужно только последнее слово bbox
+        String path = violation.getPropertyPath().toString();
+        String[] parts = path.split("\\.");
+        return parts.length > 1 ? parts[parts.length - 1] : path;
     }
 }

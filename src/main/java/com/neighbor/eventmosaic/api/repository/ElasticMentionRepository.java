@@ -14,14 +14,6 @@ import java.util.List;
 public interface ElasticMentionRepository extends ElasticsearchRepository<MentionDocument, String> {
 
     /**
-     * Находит все упоминания для указанного GlobalEventID.
-     *
-     * @param globalEventId идентификатор события
-     * @return список упоминаний
-     */
-    List<MentionDocument> findByGlobalEventId(Long globalEventId);
-
-    /**
      * Находит упоминания для указанного GlobalEventID в заданном временном диапазоне.
      * Имена полей в методе должны точно соответствовать полям в MentionDocument.
      *
